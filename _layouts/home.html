@@ -1,0 +1,77 @@
+---
+layout: default
+---
+
+{%- assign date_format = site.minima.date_format | default: "%b %-d, %Y" -%}
+
+<div class="blog mdl-layout mdl-js-layout has-drawer is-upgraded">
+  <main class="mdl-layout__content">
+    <div class="blog__posts mdl-grid">
+      {%- if site.posts.size > 0 -%}
+        {%- for post in paginator.posts -%}
+        <div class="mdl-card mdl-cell mdl-cell--{% cycle 8, 4, 4, 8 %}-col">
+          <div class="mdl-card__media mdl-color-text--grey-50" style="background-image: url({{ post.image | absolute_url }});">
+            <h3><a href="{{ post.url | relative_url }}">{{post.title}}</a></h3>
+          </div>
+          <div class="mdl-card__supporting-text meta mdl-color-text--grey-600">
+            <div class="minilogo {{ post.author | escape | downcase }}"></div>
+            <div>
+              <strong>{{ post.author | escape }}</strong>
+              <span>{{ post.date | date: date_format }}</span>
+            </div>
+          </div>
+        </div>
+        {%- endfor -%}
+      {%- endif -%}
+
+      <!-- <ul class="pager">
+          <li class="previous">
+              <a href="">&larr; Newer Posts</a>
+          </li>
+          <li class="next">
+              <a href="">Older Posts &rarr;</a>
+          </li>
+      </ul> -->
+
+      {% if paginator.total_pages > 1 %}
+        <nav class="nav mdl-color-text--grey-50 mdl-cell mdl-cell--12-col">
+          {% if paginator.previous_page %}
+          <a href="{{ paginator.previous_page_path | prepend: site.baseurl | replace: '//', '/' }}" class="nav__button">
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+              <i class="material-icons">arrow_back</i>
+            </button>
+            Newer
+          </a>
+          {% endif %}
+          <div class="section-spacer"></div>
+          {% if paginator.next_page %}
+          <a href="{{ paginator.next_page_path | prepend: site.baseurl | replace: '//', '/' }}" class="nav__button">
+            Older
+            <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon mdl-color--white mdl-color-text--grey-900" role="presentation">
+              <i class="material-icons">arrow_forward</i>
+            </button>
+          </a>
+          {% endif %}
+        </nav>
+      {% endif %}
+    </div>
+    {%- include footer.html -%}
+  </main>
+  <div class="mdl-layout__obfuscator"></div>
+</div>
+<script defer src="https://code.getmdl.io/1.3.0/material.min.js"></script>
+<script>
+  Array.prototype.forEach.call(document.querySelectorAll('.mdl-card__media'), function(el) {
+    var link = el.querySelector('a');
+    if(!link) {
+      return;
+    }
+    var target = link.getAttribute('href');
+    if(!target) {
+      return;
+    }
+    el.addEventListener('click', function() {
+      location.href = target;
+    });
+  });
+</script>
